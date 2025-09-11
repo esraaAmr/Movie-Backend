@@ -12,30 +12,29 @@ public class MovieMapper {
             return null;
         }
         
-        MovieDto dto = new MovieDto();
-        dto.setId(movie.getId());
-        dto.setTitle(movie.getTitle());
-        dto.setYear(movie.getYear());
-        dto.setImdbId(movie.getImdbId());
-        dto.setRated(movie.getRated());
-        dto.setReleased(movie.getReleased());
-        dto.setRuntime(movie.getRuntime());
-        dto.setGenre(movie.getGenre());
-        dto.setDirector(movie.getDirector());
-        dto.setWriter(movie.getWriter());
-        dto.setActors(movie.getActors());
-        dto.setPlot(movie.getPlot());
-        dto.setLanguage(movie.getLanguage());
-        dto.setCountry(movie.getCountry());
-        dto.setAwards(movie.getAwards());
-        dto.setPoster(movie.getPoster());
-        dto.setMetascore(movie.getMetascore());
-        dto.setImdbRating(movie.getImdbRating());
-        dto.setImdbVotes(movie.getImdbVotes());
-        dto.setBoxOffice(movie.getBoxOffice());
-        dto.setProduction(movie.getProduction());
-        
-        return dto;
+        return MovieDto.builder()
+                .id(movie.getId())
+                .title(movie.getTitle())
+                .year(movie.getYear())
+                .imdbId(movie.getImdbId())
+                .rated(movie.getRated())
+                .released(movie.getReleased())
+                .runtime(movie.getRuntime())
+                .genre(movie.getGenre())
+                .director(movie.getDirector())
+                .writer(movie.getWriter())
+                .actors(movie.getActors())
+                .plot(movie.getPlot())
+                .language(movie.getLanguage())
+                .country(movie.getCountry())
+                .awards(movie.getAwards())
+                .poster(movie.getPoster())
+                .metascore(movie.getMetascore())
+                .imdbRating(movie.getImdbRating())
+                .imdbVotes(movie.getImdbVotes())
+                .boxOffice(movie.getBoxOffice())
+                .production(movie.getProduction())
+                .build();
     }
 
     public Movie toEntity(MovieDto dto) {
@@ -43,29 +42,28 @@ public class MovieMapper {
             return null;
         }
         
-        Movie movie = new Movie();
-        movie.setId(dto.getId());
-        movie.setTitle(dto.getTitle());
-        movie.setYear(dto.getYear());
-        movie.setImdbId(dto.getImdbId());
-        movie.setRated(dto.getRated());
-        movie.setReleased(dto.getReleased());
-        movie.setRuntime(dto.getRuntime());
-        movie.setGenre(dto.getGenre());
-        movie.setDirector(dto.getDirector());
-        movie.setWriter(dto.getWriter());
-        movie.setActors(dto.getActors());
-        movie.setPlot(dto.getPlot());
-        movie.setLanguage(dto.getLanguage());
-        movie.setCountry(dto.getCountry());
-        movie.setAwards(dto.getAwards());
-        movie.setPoster(dto.getPoster());
-        movie.setMetascore(dto.getMetascore());
-        movie.setImdbRating(dto.getImdbRating());
-        movie.setImdbVotes(dto.getImdbVotes());
-        movie.setBoxOffice(dto.getBoxOffice());
-        movie.setProduction(dto.getProduction());
-        
-        return movie;
+        return Movie.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .year(dto.getYear())
+                .imdbId(dto.getImdbId())
+                .rated(dto.getRated())
+                .released(dto.getReleased())
+                .runtime(dto.getRuntime())
+                .genre(dto.getGenre())
+                .director(dto.getDirector())
+                .writer(dto.getWriter())
+                .actors(dto.getActors())
+                .plot(dto.getPlot())
+                .language(dto.getLanguage())
+                .country(dto.getCountry())
+                .awards(dto.getAwards())
+                .poster(dto.getPoster())
+                .metascore(dto.getMetascore())
+                .imdbRating(dto.getImdbRating())
+                .imdbVotes(dto.getImdbVotes())
+                .boxOffice(dto.getBoxOffice())
+                .production(dto.getProduction())
+                .build();
     }
 }

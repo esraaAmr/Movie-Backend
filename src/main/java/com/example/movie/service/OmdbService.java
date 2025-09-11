@@ -1,5 +1,6 @@
 package com.example.movie.service;
 
+import com.example.movie.mapper.OmdbMapper;
 import com.example.movie.model.dto.OmdbResponse;
 import com.example.movie.model.entity.Movie;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,11 +14,14 @@ public class OmdbService {
     private final RestTemplate restTemplate;
     private final String apiKey;
     private final String apiUrl;
+    private final OmdbMapper omdbMapper;
     
     public OmdbService(@Value("${omdb.api.key}") String apiKey, 
-                      @Value("${omdb.api.url}") String apiUrl) {
+                      @Value("${omdb.api.url}") String apiUrl,
+                      OmdbMapper omdbMapper) {
         this.apiKey = apiKey;
         this.apiUrl = apiUrl;
+        this.omdbMapper = omdbMapper;
         this.restTemplate = new RestTemplate();
     }
     
@@ -44,32 +48,6 @@ public class OmdbService {
     }
     
     public Movie convertOmdbResponseToMovie(OmdbResponse omdbResponse) {
-        if (omdbResponse == null || !"True".equals(omdbResponse.getResponse())) {
-            return null;
-        }
-        
-        Movie movie = new Movie();
-        movie.setTitle(omdbResponse.getTitle());
-        movie.setYear(omdbResponse.getYear());
-        movie.setImdbId(omdbResponse.getImdbID());
-        movie.setRated(omdbResponse.getRated());
-        movie.setReleased(omdbResponse.getReleased());
-        movie.setRuntime(omdbResponse.getRuntime());
-        movie.setGenre(omdbResponse.getGenre());
-        movie.setDirector(omdbResponse.getDirector());
-        movie.setWriter(omdbResponse.getWriter());
-        movie.setActors(omdbResponse.getActors());
-        movie.setPlot(omdbResponse.getPlot());
-        movie.setLanguage(omdbResponse.getLanguage());
-        movie.setCountry(omdbResponse.getCountry());
-        movie.setAwards(omdbResponse.getAwards());
-        movie.setPoster(omdbResponse.getPoster());
-        movie.setMetascore(omdbResponse.getMetascore());
-        movie.setImdbRating(omdbResponse.getImdbRating());
-        movie.setImdbVotes(omdbResponse.getImdbVotes());
-        movie.setBoxOffice(omdbResponse.getBoxOffice());
-        movie.setProduction(omdbResponse.getProduction());
-        
-        return movie;
+        return omdbMapper.toEntity(omdbResponse);
     }
 }

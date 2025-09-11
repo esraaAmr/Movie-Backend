@@ -12,13 +12,12 @@ public class UserMapper {
             return null;
         }
         
-        UserDto dto = new UserDto();
-        dto.setId(user.getId());
-        dto.setUsername(user.getUsername());
-        dto.setPassword(user.getPassword());
-        dto.setRole(user.getRole());
-        
-        return dto;
+        return UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .role(user.getRole())
+                .build();
     }
 
     public User toEntity(UserDto dto) {
@@ -26,12 +25,11 @@ public class UserMapper {
             return null;
         }
         
-        User user = new User();
-        user.setId(dto.getId());
-        user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
-        user.setRole(dto.getRole());
-        
-        return user;
+        return User.builder()
+                .id(dto.getId())
+                .username(dto.getUsername())
+                .password(dto.getPassword())
+                .role(dto.getRole())
+                .build();
     }
 }
