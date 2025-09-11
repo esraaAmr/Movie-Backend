@@ -10,5 +10,6 @@
     <include file="db/changelog/changeset/001-create-users-table.xml" relativeToChangelogFile="false" author="esraa"/>
     <include file="db/changelog/changeset/002-create-movies-table.xml" relativeToChangelogFile="false" author="esraa"/>
     <include file="db/changelog/changeset/003-create-ratings-yable.xml" relativeToChangelogFile="false" author="esraa"/>
+    <include file="db/changelog/changeset/004-add-omdb-fields-to-movies.xml" relativeToChangelogFile="false" author="esraa"/>
 
 </databaseChangeLog>

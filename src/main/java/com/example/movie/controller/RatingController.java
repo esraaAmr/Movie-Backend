@@ -1,6 +1,6 @@
 package com.example.movie.controller;
 
-import com.example.movie.model.entity.Rating;
+import com.example.movie.model.dto.RatingDto;
 import com.example.movie.service.RatingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,18 +18,22 @@ public class RatingController {
     }
 
     @PostMapping
-    public ResponseEntity<Rating> addRating(@RequestBody Rating rating) {
-        Rating saved = ratingService.addRating(rating);
-        return ResponseEntity.ok(saved);
+    public ResponseEntity<RatingDto> addRating(@RequestBody RatingDto ratingDto) {
+        try {
+            return ResponseEntity.ok(ratingService.addRatingDto(ratingDto));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
+
     @GetMapping("/movie/{movieId}")
-    public ResponseEntity<List<Rating>> getRatingsByMovie(@PathVariable Long movieId) {
-        return ResponseEntity.ok(ratingService.getRatingsByMovie(movieId));
+    public ResponseEntity<List<RatingDto>> getRatingsByMovie(@PathVariable Long movieId) {
+        return ResponseEntity.ok(ratingService.getRatingsByMovieDto(movieId));
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Rating>> getRatingsByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(ratingService.getRatingsByUser(userId));
+    public ResponseEntity<List<RatingDto>> getRatingsByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(ratingService.getRatingsByUserDto(userId));
     }
 }

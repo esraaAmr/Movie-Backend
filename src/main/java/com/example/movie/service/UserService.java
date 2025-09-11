@@ -1,9 +1,9 @@
 package com.example.movie.service;
 
+import com.example.movie.mapper.UserMapper;
+import com.example.movie.model.dto.UserDto;
 import com.example.movie.model.entity.User;
-import com.example.movie.repository.MovieRepository;
 import com.example.movie.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,18 +12,17 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    public Optional<User> login(String username, String password) {
+    public Optional<UserDto> loginDto(String username, String password) {
         return userRepository.findByUsername(username)
-                .filter(user -> user.getPassword().equals(password));
+                .filter(user -> user.getPassword().equals(password))
+                .map(userMapper::toDto);
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
 }
