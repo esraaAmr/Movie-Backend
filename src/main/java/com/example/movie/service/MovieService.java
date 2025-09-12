@@ -26,15 +26,11 @@ public class MovieService {
 
     public MovieDto addMovieDto(MovieDto movieDto) {
         Movie movie = movieMapper.toEntity(movieDto);
-        
-        // Check if movie already exists
-        movieRepository.findByImdbId(movie.getImdbId())
-                .stream()
-                .findAny()
-                .ifPresent(m -> {
-                    throw new IllegalStateException("Movie already exists");
-                });
 
+        // Check if movie already exists
+        if (movie.getImdbId() != null && movieRepository.findByImdbId(movie.getImdbId()).isPresent()) {
+            throw new IllegalStateException("Movie already exists");
+        }
         Movie savedMovie = movieRepository.save(movie);
         return movieMapper.toDto(savedMovie);
     }
@@ -64,27 +60,30 @@ public class MovieService {
 
     public MovieDto searchMovieFromOmdb(String title) {
         OmdbResponse omdbResponse = omdbService.searchMovieByTitle(title);
-        if (omdbResponse != null && "True".equals(omdbResponse.getResponse())) {
+        if (omdbResponse != null && "True".equalsIgnoreCase(omdbResponse.getResponse())) {
             return movieMapper.toDto(omdbService.convertOmdbResponseToMovie(omdbResponse));
         }
         return null;
     }
 
+    // 🔹 The actual logic to import a movie from OMDb
     public MovieDto importMovieFromOmdb(String imdbId) {
         OmdbResponse omdbResponse = omdbService.searchMovieByImdbId(imdbId);
-        if (omdbResponse != null && "True".equals(omdbResponse.getResponse())) {
-            Movie movie = omdbService.convertOmdbResponseToMovie(omdbResponse);
-            
-            // Check if movie already exists
-            Optional<Movie> existingMovie = movieRepository.findByImdbId(imdbId).stream().findFirst();
-            if (existingMovie.isPresent()) {
-                throw new IllegalStateException("Movie with IMDB ID " + imdbId + " already exists");
-            }
-            
-            Movie savedMovie = movieRepository.save(movie);
-            return movieMapper.toDto(savedMovie);
-        }
-        return null;
-    }
 
+        if (omdbResponse == null) {
+            throw new RuntimeException("OMDb returned null for imdbId: " + imdbId);
+        }
+        if (!"True".equalsIgnoreCase(omdbResponse.getResponse())) {
+            throw new RuntimeException("OMDb error for imdbId " + imdbId + ": " + omdbResponse.getResponse());
+        }
+
+        Movie movie = omdbService.convertOmdbResponseToMovie(omdbResponse);
+
+        if (movieRepository.findByImdbId(movie.getImdbId()).isPresent()) {
+            throw new IllegalStateException("Movie already exists");
+        }
+
+        Movie savedMovie = movieRepository.save(movie);
+        return movieMapper.toDto(savedMovie);
+    }
 }

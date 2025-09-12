@@ -1,5 +1,6 @@
 package com.example.movie.controller;
 
+import com.example.movie.model.dto.CreateMovieDto;
 import com.example.movie.model.dto.MovieDto;
 import com.example.movie.service.MovieService;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,17 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<MovieDto> addMovie(@RequestBody MovieDto movieDto) {
-        return ResponseEntity.ok(movieService.addMovieDto(movieDto));
+    public ResponseEntity<MovieDto> addMovie(@RequestBody CreateMovieDto createMovieDto) {
+        MovieDto movieDto = MovieDto.builder()
+                .title(createMovieDto.getTitle())
+                .year(createMovieDto.getYear())
+                .imdbId(createMovieDto.getImdbId())
+                .build();
+        try {
+            return ResponseEntity.ok(movieService.addMovieDto(movieDto));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409).build();
+        }
     }
 
     @GetMapping
@@ -50,16 +60,15 @@ public class MovieController {
     }
 
     @PostMapping("/omdb/import")
-    public ResponseEntity<MovieDto> importMovieFromOmdb(@RequestParam String imdbId) {
+    public ResponseEntity<?> importMovieFromOmdb(@RequestParam String imdbId) {
         try {
             MovieDto movie = movieService.importMovieFromOmdb(imdbId);
-            if (movie != null) {
-                return ResponseEntity.ok(movie);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            return ResponseEntity.ok(movie);
         } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(409).body("Movie already exists");
+        } catch (RuntimeException e) {
+            // OMDb error or null
+            return ResponseEntity.status(502).body(e.getMessage());
         }
     }
 

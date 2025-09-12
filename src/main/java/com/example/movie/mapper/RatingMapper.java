@@ -13,12 +13,9 @@ public class RatingMapper {
         }
         
         return RatingDto.builder()
-                .id(rating.getId())
                 .rating(rating.getRating())
                 .userId(rating.getUser() != null ? rating.getUser().getId() : null)
-                .username(rating.getUser() != null ? rating.getUser().getUsername() : null)
                 .movieId(rating.getMovie() != null ? rating.getMovie().getId() : null)
-                .movieTitle(rating.getMovie() != null ? rating.getMovie().getTitle() : null)
                 .build();
     }
 
@@ -28,7 +25,6 @@ public class RatingMapper {
         }
         
         return Rating.builder()
-                .id(dto.getId())
                 .rating(dto.getRating())
                 // Note: For entity creation, you would typically need to fetch the related entities
                 // This is usually handled in the service layer

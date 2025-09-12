@@ -35,7 +35,7 @@ public class OmdbService {
         
         return restTemplate.getForObject(url, OmdbResponse.class);
     }
-    
+
     public OmdbResponse searchMovieByImdbId(String imdbId) {
         String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
                 .queryParam("apikey", apiKey)
@@ -43,9 +43,22 @@ public class OmdbService {
                 .queryParam("plot", "full")
                 .build()
                 .toUriString();
-        
-        return restTemplate.getForObject(url, OmdbResponse.class);
+
+        System.out.println("Calling OMDb: " + url);
+
+        // log the raw JSON before mapping
+        String rawJson = restTemplate.getForObject(url, String.class);
+        System.out.println("Raw OMDb JSON: " + rawJson);
+
+        // now map to OmdbResponse
+        OmdbResponse response = restTemplate.getForObject(url, OmdbResponse.class);
+        System.out.println("OMDb returned Response field: " +
+                (response != null ? response.getResponse() : "null"));
+
+        return response;
     }
+
+
     
     public Movie convertOmdbResponseToMovie(OmdbResponse omdbResponse) {
         return omdbMapper.toEntity(omdbResponse);

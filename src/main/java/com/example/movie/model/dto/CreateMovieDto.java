@@ -4,14 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.math.BigDecimal;
 
+// For POST only
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RatingDto {
-    private Long userId;
-    private Long movieId;
-    private BigDecimal rating;
+public class CreateMovieDto {
+    private String title;
+    private String year;
+    private String imdbId;
 }
+
