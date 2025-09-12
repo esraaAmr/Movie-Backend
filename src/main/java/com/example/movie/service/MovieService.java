@@ -66,7 +66,6 @@ public class MovieService {
         return null;
     }
 
-    // 🔹 The actual logic to import a movie from OMDb
     public MovieDto importMovieFromOmdb(String imdbId) {
         OmdbResponse omdbResponse = omdbService.searchMovieByImdbId(imdbId);
 

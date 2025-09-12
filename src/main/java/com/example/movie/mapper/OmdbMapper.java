@@ -2,37 +2,23 @@ package com.example.movie.mapper;
 
 import com.example.movie.model.dto.OmdbResponse;
 import com.example.movie.model.entity.Movie;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
-@Component
-public class OmdbMapper {
+@Mapper(componentModel = "spring")
+public interface OmdbMapper {
 
-    public Movie toEntity(OmdbResponse omdbResponse) {
+    @Mapping(target = "id", ignore = true) // OMDb responses won't have DB ID
+    @Mapping(target = "title", source = "title")
+    @Mapping(target = "year", source = "year")
+    @Mapping(target = "imdbId", source = "imdbID")
+    Movie toEntity(OmdbResponse omdbResponse);
+
+    default Movie mapIfValid(OmdbResponse omdbResponse) {
         if (omdbResponse == null || !"True".equals(omdbResponse.getResponse())) {
             return null;
         }
-        
-        return Movie.builder()
-                .title(omdbResponse.getTitle())
-                .year(omdbResponse.getYear())
-                .imdbId(omdbResponse.getImdbID())
-                .rated(omdbResponse.getRated())
-                .released(omdbResponse.getReleased())
-                .runtime(omdbResponse.getRuntime())
-                .genre(omdbResponse.getGenre())
-                .director(omdbResponse.getDirector())
-                .writer(omdbResponse.getWriter())
-                .actors(omdbResponse.getActors())
-                .plot(omdbResponse.getPlot())
-                .language(omdbResponse.getLanguage())
-                .country(omdbResponse.getCountry())
-                .awards(omdbResponse.getAwards())
-                .poster(omdbResponse.getPoster())
-                .metascore(omdbResponse.getMetascore())
-                .imdbRating(omdbResponse.getImdbRating())
-                .imdbVotes(omdbResponse.getImdbVotes())
-                .boxOffice(omdbResponse.getBoxOffice())
-                .production(omdbResponse.getProduction())
-                .build();
+        return toEntity(omdbResponse);
     }
 }

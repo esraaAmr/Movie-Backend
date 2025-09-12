@@ -2,12 +2,14 @@ package com.example.movie.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @Builder @NoArgsConstructor @AllArgsConstructor @Entity @Table(name = "movies")
+import java.util.List;
+
+@Entity @Table(name = "movies") @Data @NoArgsConstructor @AllArgsConstructor
 public class Movie {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -71,4 +73,7 @@ public class Movie {
 
     @Column(length = 255)
     private String production;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Rating> ratings;
 }
