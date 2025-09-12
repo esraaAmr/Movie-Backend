@@ -18,6 +18,6 @@ public class SwaggerConfig {
                         .description("API for Movie Management System with OMDB Integration")
                         .contact(new Contact()
                                 .name("Movie API Team")
-                                .email("contact@movieapi.com")));
+                                .email("esraaamrkandil@gmail.com")));
     }
 }
