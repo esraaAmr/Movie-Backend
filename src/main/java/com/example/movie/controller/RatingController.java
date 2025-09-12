@@ -26,7 +26,6 @@ public class RatingController {
         }
     }
 
-
     @GetMapping("/movie/{movieId}")
     public ResponseEntity<List<RatingDto>> getRatingsByMovie(@PathVariable Long movieId) {
         return ResponseEntity.ok(ratingService.getRatingsByMovieDto(movieId));

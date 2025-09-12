@@ -1,6 +1,5 @@
 package com.example.movie.controller;
 
-import com.example.movie.model.dto.CreateMovieDto;
 import com.example.movie.model.dto.MovieDto;
 import com.example.movie.service.MovieService;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<MovieDto> addMovie(@RequestBody CreateMovieDto createMovieDto) {
+    public ResponseEntity<MovieDto> addMovie(@RequestBody MovieDto createMovieDto) {
         MovieDto movieDto = MovieDto.builder()
                 .title(createMovieDto.getTitle())
                 .year(createMovieDto.getYear())

@@ -26,9 +26,6 @@ public class RatingMapper {
         
         return Rating.builder()
                 .rating(dto.getRating())
-                // Note: For entity creation, you would typically need to fetch the related entities
-                // This is usually handled in the service layer
-                // For now, we'll leave the relationships null and let the service handle them
                 .build();
     }
 }
