@@ -3,8 +3,6 @@ package com.example.movie.controller;
 import com.example.movie.model.dto.UserDto;
 import com.example.movie.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +19,6 @@ public class UserController {
     }
 
     @Operation(summary = "Login with username and password")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Login successful"),
-            @ApiResponse(responseCode = "404", description = "User not found or invalid credentials")
-    })
     @PostMapping("/login")
     public ResponseEntity<UserDto> login(@RequestParam String username, @RequestParam String password) {
         return userService.loginDto(username, password)

@@ -27,7 +27,6 @@ public class MovieService {
     public MovieDto addMovieDto(MovieDto movieDto) {
         Movie movie = movieMapper.toEntity(movieDto);
 
-        // Check if movie already exists
         if (movie.getImdbId() != null && movieRepository.findByImdbId(movie.getImdbId()).isPresent()) {
             throw new IllegalStateException("Movie already exists");
         }
@@ -58,14 +57,11 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
-    public MovieDto searchMovieFromOmdb(String title) {
-        OmdbResponse omdbResponse = omdbService.searchMovieByTitle(title);
-        if (omdbResponse != null && "True".equalsIgnoreCase(omdbResponse.getResponse())) {
-            return movieMapper.toDto(omdbService.convertOmdbResponseToMovie(omdbResponse));
-        }
-        return null;
-    }
-
+    /**
+     * Import a single movie from OMDb using imdbId and persist into DB.
+     * Throws IllegalStateException if movie already exists.
+     * Throws RuntimeException for OMDb errors.
+     */
     public MovieDto importMovieFromOmdb(String imdbId) {
         OmdbResponse omdbResponse = omdbService.searchMovieByImdbId(imdbId);
 
@@ -77,6 +73,10 @@ public class MovieService {
         }
 
         Movie movie = omdbService.convertOmdbResponseToMovie(omdbResponse);
+
+        if (movie.getImdbId() == null) {
+            throw new RuntimeException("OMDb response missing imdbID for imdbId: " + imdbId);
+        }
 
         if (movieRepository.findByImdbId(movie.getImdbId()).isPresent()) {
             throw new IllegalStateException("Movie already exists");

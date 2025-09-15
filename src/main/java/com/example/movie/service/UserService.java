@@ -24,5 +24,4 @@ public class UserService {
                 .filter(user -> user.getPassword().equals(password))
                 .map(userMapper::toDto);
     }
-
 }

@@ -13,6 +13,7 @@ public interface OmdbMapper {
     @Mapping(target = "title", source = "title")
     @Mapping(target = "year", source = "year")
     @Mapping(target = "imdbId", source = "imdbID")
+    @Mapping(target = "poster", source = "poster")
     Movie toEntity(OmdbResponse omdbResponse);
 
     default Movie mapIfValid(OmdbResponse omdbResponse) {

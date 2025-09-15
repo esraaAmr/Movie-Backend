@@ -13,4 +13,5 @@ public class MovieDto {
     private String title;
     private String year;
     private String imdbId;
+    private String poster;
 }

@@ -2,64 +2,59 @@ package com.example.movie.service;
 
 import com.example.movie.mapper.OmdbMapper;
 import com.example.movie.model.dto.OmdbResponse;
+import com.example.movie.model.dto.OmdbSearchResponse;
+import com.example.movie.model.dto.OmdbSearchResult;
 import com.example.movie.model.entity.Movie;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class OmdbService {
-    
+
     private final RestTemplate restTemplate;
     private final String apiKey;
     private final String apiUrl;
     private final OmdbMapper omdbMapper;
-    
-    public OmdbService(@Value("${omdb.api.key}") String apiKey, 
-                      @Value("${omdb.api.url}") String apiUrl,
-                      OmdbMapper omdbMapper) {
+
+    public OmdbService(@Value("${omdb.api.key}") String apiKey,
+                       @Value("${omdb.api.url}") String apiUrl,
+                       OmdbMapper omdbMapper) {
         this.apiKey = apiKey;
-        this.apiUrl = apiUrl;
+        this.apiUrl = apiUrl.endsWith("/") ? apiUrl : apiUrl + "/";
         this.omdbMapper = omdbMapper;
         this.restTemplate = new RestTemplate();
     }
-    
-    public OmdbResponse searchMovieByTitle(String title) {
-        String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
-                .queryParam("apikey", apiKey)
-                .queryParam("t", title)
-                .queryParam("plot", "full")
-                .build()
-                .toUriString();
-        
+
+    /**
+     * Search OMDb by imdb id and return full details mapped to OmdbResponse.
+     */
+    public OmdbResponse searchMovieByImdbId(String imdbId) {
+        String url = apiUrl + "?apikey=" + apiKey + "&i=" + URLEncoder.encode(imdbId, StandardCharsets.UTF_8) + "&plot=full";
+        // raw JSON logging could be kept during debugging; removed here for clarity
         return restTemplate.getForObject(url, OmdbResponse.class);
     }
 
-    public OmdbResponse searchMovieByImdbId(String imdbId) {
-        String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
-                .queryParam("apikey", apiKey)
-                .queryParam("i", imdbId)
-                .queryParam("plot", "full")
-                .build()
-                .toUriString();
-
-        System.out.println("Calling OMDb: " + url);
-
-        // log the raw JSON before mapping
-        String rawJson = restTemplate.getForObject(url, String.class);
-        System.out.println("Raw OMDb JSON: " + rawJson);
-
-        // now map to OmdbResponse
-        OmdbResponse response = restTemplate.getForObject(url, OmdbResponse.class);
-        System.out.println("OMDb returned Response field: " +
-                (response != null ? response.getResponse() : "null"));
-
-        return response;
+    /**
+     * Search OMDb by keyword (s=) and return list of search results.
+     */
+    public List<OmdbSearchResult> searchMoviesListFromOmdb(String keyword) {
+        String url = apiUrl + "?apikey=" + apiKey + "&s=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8);
+        OmdbSearchResponse response = restTemplate.getForObject(url, OmdbSearchResponse.class);
+        if (response != null && "True".equalsIgnoreCase(response.getResponse())) {
+            return response.getSearch();
+        }
+        return Collections.emptyList();
     }
 
-
-    
+    /**
+     * Convert a detailed OmdbResponse to your Movie entity using mapper.
+     */
     public Movie convertOmdbResponseToMovie(OmdbResponse omdbResponse) {
         return omdbMapper.toEntity(omdbResponse);
     }

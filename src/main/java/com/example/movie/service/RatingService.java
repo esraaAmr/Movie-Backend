@@ -21,10 +21,10 @@ public class RatingService {
     private final MovieRepository movieRepository;
     private final RatingMapper ratingMapper;
 
-    public RatingService(RatingRepository ratingRepository, 
-                        UserRepository userRepository, 
-                        MovieRepository movieRepository, 
-                        RatingMapper ratingMapper) {
+    public RatingService(RatingRepository ratingRepository,
+                         UserRepository userRepository,
+                         MovieRepository movieRepository,
+                         RatingMapper ratingMapper) {
         this.ratingRepository = ratingRepository;
         this.userRepository = userRepository;
         this.movieRepository = movieRepository;
@@ -32,16 +32,15 @@ public class RatingService {
     }
 
     public RatingDto addRatingDto(RatingDto ratingDto) {
-        // Fetch related entities
         User user = userRepository.findById(ratingDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         Movie movie = movieRepository.findById(ratingDto.getMovieId())
                 .orElseThrow(() -> new IllegalArgumentException("Movie not found"));
-        
+
         Rating rating = ratingMapper.toEntity(ratingDto);
         rating.setUser(user);
         rating.setMovie(movie);
-        
+
         Rating savedRating = ratingRepository.save(rating);
         return ratingMapper.toDto(savedRating);
     }
@@ -59,5 +58,4 @@ public class RatingService {
                 .map(ratingMapper::toDto)
                 .collect(Collectors.toList());
     }
-
 }
