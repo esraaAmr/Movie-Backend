@@ -5,6 +5,7 @@ import com.example.movie.mapper.UserMapper;
 import com.example.movie.model.dto.UserDto;
 import com.example.movie.model.entity.User;
 import com.example.movie.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,10 +15,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Optional<UserDto> loginDto(String username, String password) {
@@ -28,7 +31,8 @@ public class UserService {
         }
 
         User user = userOptional.get();
-        if (!user.getPassword().equals(password)) {
+        // Use PasswordEncoder to compare hashed passwords
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new AuthenticationFailedException("Invalid username or password");
         }
 
