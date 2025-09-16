@@ -14,5 +14,7 @@ public class OmdbSearchResponse {
 
     @JsonProperty("Response")
     private String response;
-}
 
+    @JsonProperty("Error")
+    private String error;
+}

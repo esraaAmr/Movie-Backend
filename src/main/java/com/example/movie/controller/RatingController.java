@@ -23,11 +23,7 @@ public class RatingController {
     @Operation(summary = "Add a rating")
     @PostMapping
     public ResponseEntity<RatingDto> addRating(@RequestBody RatingDto ratingDto) {
-        try {
-            return ResponseEntity.ok(ratingService.addRatingDto(ratingDto));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(ratingService.addRatingDto(ratingDto));
     }
 
     @Operation(summary = "Get all ratings for a movie")

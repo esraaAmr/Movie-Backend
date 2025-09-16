@@ -21,8 +21,7 @@ public class UserController {
     @Operation(summary = "Login with username and password")
     @PostMapping("/login")
     public ResponseEntity<UserDto> login(@RequestParam String username, @RequestParam String password) {
-        return userService.loginDto(username, password)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        UserDto userDto = userService.loginDto(username, password).get();
+        return ResponseEntity.ok(userDto);
     }
 }

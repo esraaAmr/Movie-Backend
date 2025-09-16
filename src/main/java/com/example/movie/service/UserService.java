@@ -1,5 +1,6 @@
 package com.example.movie.service;
 
+import com.example.movie.error.exception.AuthenticationFailedException;
 import com.example.movie.mapper.UserMapper;
 import com.example.movie.model.dto.UserDto;
 import com.example.movie.model.entity.User;
@@ -20,8 +21,17 @@ public class UserService {
     }
 
     public Optional<UserDto> loginDto(String username, String password) {
-        return userRepository.findByUsername(username)
-                .filter(user -> user.getPassword().equals(password))
-                .map(userMapper::toDto);
+        Optional<User> userOptional = userRepository.findByUsername(username);
+
+        if (userOptional.isEmpty()) {
+            throw new AuthenticationFailedException("Invalid username or password");
+        }
+
+        User user = userOptional.get();
+        if (!user.getPassword().equals(password)) {
+            throw new AuthenticationFailedException("Invalid username or password");
+        }
+
+        return Optional.of(userMapper.toDto(user));
     }
 }

@@ -27,17 +27,13 @@ public class MovieController {
     @Operation(summary = "Add a new movie manually")
     @PostMapping
     public ResponseEntity<MovieDto> addMovie(@RequestBody MovieDto createMovieDto) {
-        try {
-            MovieDto movieDto = MovieDto.builder()
-                    .title(createMovieDto.getTitle())
-                    .year(createMovieDto.getYear())
-                    .imdbId(createMovieDto.getImdbId())
-                    .poster(createMovieDto.getPoster())
-                    .build();
-            return ResponseEntity.ok(movieService.addMovieDto(movieDto));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(409).build();
-        }
+        MovieDto movieDto = MovieDto.builder()
+                .title(createMovieDto.getTitle())
+                .year(createMovieDto.getYear())
+                .imdbId(createMovieDto.getImdbId())
+                .poster(createMovieDto.getPoster())
+                .build();
+        return ResponseEntity.ok(movieService.addMovieDto(movieDto));
     }
 
     @Operation(summary = "Get all movies (from database)")
@@ -49,9 +45,8 @@ public class MovieController {
     @Operation(summary = "Get a movie by DB id")
     @GetMapping("/{id}")
     public ResponseEntity<MovieDto> getMovieById(@PathVariable Long id) {
-        return movieService.getMovieByIdDto(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        MovieDto movieDto = movieService.getMovieByIdDto(id);
+        return ResponseEntity.ok(movieDto);
     }
 
     @Operation(summary = "Search movies in the database by title")
@@ -68,15 +63,9 @@ public class MovieController {
 
     @Operation(summary = "Import a single movie from OMDb using imdbId")
     @PostMapping("/omdb/import")
-    public ResponseEntity<?> importMovieFromOmdb(@RequestParam String imdbId) {
-        try {
-            MovieDto movie = movieService.importMovieFromOmdb(imdbId);
-            return ResponseEntity.ok(movie);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(409).body(Collections.singletonMap("error", "Movie already exists"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(502).body(Collections.singletonMap("error", e.getMessage()));
-        }
+    public ResponseEntity<MovieDto> importMovieFromOmdb(@RequestParam String imdbId) {
+        MovieDto movie = movieService.importMovieFromOmdb(imdbId);
+        return ResponseEntity.ok(movie);
     }
 
     @Operation(summary = "Import multiple movies from OMDb using a list of imdbIds")
