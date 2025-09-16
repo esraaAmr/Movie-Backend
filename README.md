@@ -52,6 +52,7 @@ cd Movie-Backend
    Open your PostgreSQL client or terminal and run:
    ```sql
    CREATE DATABASE moviedb;
+   
    ```sql
    INSERT INTO users (username, password, role)
    VALUES 
