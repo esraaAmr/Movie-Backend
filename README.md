@@ -48,17 +48,21 @@ cd Movie-Backend
 1. **Install PostgreSQL**  
    Make sure PostgreSQL is installed and running on your machine.
 
-2. **Create the Database**  
+### 2️⃣ Create the Database and Initial Users
+
+1. **Create the Database**  
    Open your PostgreSQL client or terminal and run:
+
    ```sql
    CREATE DATABASE moviedb;
-   
+
+2. **Initial user**
+
    ```sql
    INSERT INTO users (username, password, role)
    VALUES 
-     ('admin', 'admin123', 'ADMIN'),
-     ('user', 'user123', 'USER');
-   
+  ('admin', 'admin123', 'ADMIN'),
+  ('user', 'user123', 'USER');
 
 ### 3. Build and Run
 
