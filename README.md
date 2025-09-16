@@ -42,6 +42,7 @@ git clone https://github.com/esraaAmr/Movie-Backend.git
 cd Movie-Backend
 ```
 
+
 ### 2️⃣ Database Setup
 
 1. **Install PostgreSQL**  
@@ -51,16 +52,14 @@ cd Movie-Backend
    Open your PostgreSQL client or terminal and run:
    ```sql
    CREATE DATABASE moviedb;
+   ```sql
+   INSERT INTO users (username, password, role)
+   VALUES 
+     ('admin', 'admin123', 'ADMIN'),
+     ('user', 'user123', 'USER');
+   
 
-### 3. OMDb API Configuration
-
-1. Get your API key from [OMDb API](http://www.omdbapi.com/apikey.aspx)
-2. Update the API key in `src/main/resources/application.properties`:
-   ```properties
-   omdb.api.key=your_api_key_here
-   ```
-
-### 4. Build and Run
+### 3. Build and Run
 
 ```bash
 # Build the project
