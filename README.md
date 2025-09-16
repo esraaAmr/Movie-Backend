@@ -60,9 +60,7 @@ cd Movie-Backend
 
    ```sql
    INSERT INTO users (username, password, role)
-   VALUES 
-  ('admin', 'admin123', 'ADMIN'),
-  ('user', 'user123', 'USER');
+   VALUES ('admin', 'admin123', 'ADMIN'), ('user', 'user123', 'USER');
 
 ### 3. Build and Run
 
