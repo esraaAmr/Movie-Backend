@@ -31,7 +31,6 @@ public class AdminInitializer implements CommandLineRunner {
             log.info("Admin user created: {}", admin.getUsername());
         }
 
-        // Create regular user if it doesn't exist
         if (userRepository.findByUsername("user").isEmpty()) {
             User user = new User();
             user.setUsername("user");

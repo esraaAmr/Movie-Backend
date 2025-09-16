@@ -9,7 +9,7 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface OmdbMapper {
 
-    @Mapping(target = "id", ignore = true) // OMDb responses won't have DB ID
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "title", source = "title")
     @Mapping(target = "year", source = "year")
     @Mapping(target = "imdbId", source = "imdbID")

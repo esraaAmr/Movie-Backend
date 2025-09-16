@@ -37,7 +37,6 @@ public class MovieService {
     }
 
     public void removeMovie(Long id) {
-        // Check if movie exists before deleting
         if (!movieRepository.existsById(id)) {
             throw new MovieNotFoundException("Movie not found with id: " + id);
         }

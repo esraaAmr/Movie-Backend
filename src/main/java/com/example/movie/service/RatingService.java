@@ -42,13 +42,11 @@ public class RatingService {
         Movie movie = movieRepository.findById(ratingDto.getMovieId())
                 .orElseThrow(() -> new MovieNotFoundException("Movie not found with id: " + ratingDto.getMovieId()));
 
-        // Check if user already rated this movie
         if (ratingRepository.existsByUserIdAndMovieId(ratingDto.getUserId(), ratingDto.getMovieId())) {
             throw new DuplicateRatingException("User " + ratingDto.getUserId() +
                     " has already rated movie " + ratingDto.getMovieId());
         }
 
-        // Validate rating value (between 1-5) using BigDecimal comparison
         BigDecimal ratingValue = ratingDto.getRating();
         BigDecimal minRating = new BigDecimal("1");
         BigDecimal maxRating = new BigDecimal("5");

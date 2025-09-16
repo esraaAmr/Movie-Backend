@@ -6,7 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
-@Entity @Table(name = "ratings") @Data @NoArgsConstructor @AllArgsConstructor
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "ratings")
 public class Rating {
 
     @Id
